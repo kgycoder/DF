@@ -134,7 +134,17 @@ app/src/main/java/com/arena/gounmal/
 - `ShiftDoubleTapDetectorTest` — 0.4초 창, 세 번째 누름 처리
 - `PusanResponseParserTest` — 응답 파싱, 문자열 속 괄호, offset 재매핑
 
-## 8. 알려진 한계
+## 8. 스크린샷
+
+`docs/screenshots` 의 이미지는 `ScreenshotTest` 가 실제 컴포저블을 렌더링해 만든 것입니다.
+push 될 때마다 CI 가 다시 그려 커밋하므로, UI 를 고치면 스크린샷도 자동으로 최신 상태가 됩니다.
+
+```bash
+./gradlew testDebugUnitTest --tests "*ScreenshotTest*"
+# 결과: app/build/screenshots/screen-light.png, screen-dark.png
+```
+
+## 9. 알려진 한계
 
 - 오프라인 엔진은 **보수적**입니다. 사전에 없는 단어를 추측해서 고치지 않으므로, 잡지 못하는 오류도 있습니다.
   (정밀 검사 토글을 켜면 더 많이 잡힙니다.)

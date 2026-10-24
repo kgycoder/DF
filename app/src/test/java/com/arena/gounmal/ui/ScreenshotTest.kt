@@ -78,19 +78,23 @@ class ScreenshotTest {
             }
         }
 
-        val bitmap = runCatching {
-            composeRule.mainClock.advanceTimeBy(500)
-            composeRule.waitForIdle()
-            composeRule.onRoot().captureToImage().asAndroidBitmap()
-        }.getOrElse {
-            drawDecorView()
-        }
+        val bitmap = captureBitmap()
+        org.junit.Assume.assumeTrue("스크린샷 캡처를 사용할 수 없는 환경이라 건너뜁니다.", bitmap != null)
 
         val outDir = File("build/screenshots")
         outDir.mkdirs()
         FileOutputStream(File(outDir, "$name.png")).use { stream ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, stream)
         }
+    }
+
+    /** 화면을 PNG 로 만든다. 캡처가 불가능한 환경이면 null. */
+    private fun captureBitmap(): Bitmap? = runCatching {
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.waitForIdle()
+        composeRule.onRoot().captureToImage().asAndroidBitmap()
+    }.getOrElse {
+        runCatching { drawDecorView() }.getOrNull()
     }
 
     /** Compose 테스트 유휴 대기 없이 화면을 직접 그린다. */

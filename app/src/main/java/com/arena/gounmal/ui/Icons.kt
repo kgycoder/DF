@@ -86,17 +86,20 @@ private fun DrawScope.drawShift(color: Color, s: Float, filled: Boolean) {
 fun BackspaceIcon(color: Color, modifier: Modifier = Modifier, size: Dp = 20.dp) {
     Canvas(modifier.size(size)) {
         val s = this.size.minDimension
-        val path = Path().apply {
-            moveTo(s * 0.34f, s * 0.20f)
-            lineTo(s * 0.90f, s * 0.20f)
-            lineTo(s * 0.90f, s * 0.80f)
-            lineTo(s * 0.34f, s * 0.80f)
-            lineTo(s * 0.06f, s * 0.50f)
+        val w = s * 0.085f
+        // 본체: 왼쪽이 뾰족한 둥근 사각형
+        val body = Path().apply {
+            moveTo(s * 0.40f, s * 0.24f)
+            lineTo(s * 0.86f, s * 0.24f)
+            lineTo(s * 0.86f, s * 0.76f)
+            lineTo(s * 0.40f, s * 0.76f)
+            lineTo(s * 0.10f, s * 0.50f)
             close()
         }
-        drawPath(path, color, style = Stroke(width = s * 0.09f, join = StrokeJoin.Round))
-        drawLine(color, Offset(s * 0.47f, s * 0.38f), Offset(s * 0.68f, s * 0.62f), s * 0.09f, StrokeCap.Round)
-        drawLine(color, Offset(s * 0.68f, s * 0.38f), Offset(s * 0.47f, s * 0.62f), s * 0.09f, StrokeCap.Round)
+        drawPath(body, color, style = Stroke(width = w, join = StrokeJoin.Round, cap = StrokeCap.Round))
+        // ×
+        drawLine(color, Offset(s * 0.48f, s * 0.40f), Offset(s * 0.67f, s * 0.60f), w, StrokeCap.Round)
+        drawLine(color, Offset(s * 0.67f, s * 0.40f), Offset(s * 0.48f, s * 0.60f), w, StrokeCap.Round)
     }
 }
 
