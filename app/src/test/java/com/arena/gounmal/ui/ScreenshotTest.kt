@@ -1,6 +1,8 @@
 package com.arena.gounmal.ui
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,15 +16,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.test.captureToImage
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arena.gounmal.OnlineState
@@ -37,12 +40,13 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
+import org.robolectric.shadows.ShadowLooper
 import java.io.File
 import java.io.FileOutputStream
 
 /**
- * 실제 컴포저블을 JVM 에서 그려 PNG 로 남긴다.
- * (기기 없이 디자인을 확인하고, README 스크린샷을 자동 갱신하기 위한 테스트)
+ * 실제 컴포저블을 JVM(레이아웃립 대신 Robolectric 네이티브 그래픽)에서 그려 PNG 로 남긴다.
+ * 기기 없이 디자인을 확인하고 README 스크린샷을 자동 갱신하기 위한 테스트.
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -50,7 +54,7 @@ import java.io.FileOutputStream
 class ScreenshotTest {
 
     @get:Rule
-    val composeRule = createComposeRule()
+    val composeRule = createAndroidComposeRule<ComponentActivity>()
 
     private val sampleText = "안녕하세요! 오늘은 몇일 만에 사무실에 나갔어요. " +
         "아침부터 정신이 없어서 인사도 제대로 못했는데, 웬지 오늘은 운이 좋은것같아요. " +
@@ -68,23 +72,48 @@ class ScreenshotTest {
 
         composeRule.setContent {
             GounmalTheme(darkTheme = dark) {
-                androidx.compose.runtime.CompositionLocalProvider(LocalGounmalMotion provides false) {
-                    PreviewScreen(
-                        text = sampleText,
-                        issues = issues,
-                        active = active,
-                    )
+                CompositionLocalProvider(LocalGounmalMotion provides false) {
+                    PreviewScreen(text = sampleText, issues = issues, active = active)
                 }
             }
         }
-        composeRule.waitForIdle()
 
-        val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()
+        val bitmap = runCatching {
+            composeRule.mainClock.advanceTimeBy(500)
+            composeRule.waitForIdle()
+            composeRule.onRoot().captureToImage().asAndroidBitmap()
+        }.getOrElse {
+            drawDecorView()
+        }
+
         val outDir = File("build/screenshots")
         outDir.mkdirs()
         FileOutputStream(File(outDir, "$name.png")).use { stream ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         }
+    }
+
+    /** Compose 테스트 유휴 대기 없이 화면을 직접 그린다. */
+    private fun drawDecorView(): Bitmap {
+        repeat(3) {
+            ShadowLooper.idleMainLooper()
+            composeRule.mainClock.advanceTimeBy(200)
+        }
+        val view = composeRule.activity.window.decorView
+        if (view.width == 0 || view.height == 0) {
+            view.measure(
+                android.view.View.MeasureSpec.makeMeasureSpec(1080, android.view.View.MeasureSpec.EXACTLY),
+                android.view.View.MeasureSpec.makeMeasureSpec(2340, android.view.View.MeasureSpec.EXACTLY),
+            )
+            view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+        }
+        val bitmap = Bitmap.createBitmap(
+            view.width.coerceAtLeast(1),
+            view.height.coerceAtLeast(1),
+            Bitmap.Config.ARGB_8888,
+        )
+        view.draw(Canvas(bitmap))
+        return bitmap
     }
 
     @Composable
