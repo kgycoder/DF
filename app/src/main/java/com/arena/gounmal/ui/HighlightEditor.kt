@@ -227,7 +227,7 @@ private fun DrawScope.drawIssueHighlight(
     if (boxes.isEmpty()) return
 
     val radius = 6.dp.toPx()
-    val tight = 2.0f.dp.toPx()
+    val tight = 1.2f.dp.toPx()
     val fillAlpha = if (active) 1f else 0.82f
 
     boxes.forEachIndexed { index, rect ->
@@ -237,7 +237,7 @@ private fun DrawScope.drawIssueHighlight(
         val bottomRadius = if (isLast) radius else radius * 0.3f
 
         drawRoundedFill(
-            rect = Rect(rect.left - tight, rect.top + 1.5f.dp.toPx(), rect.right + tight, rect.bottom - 1.5f.dp.toPx()),
+            rect = Rect(rect.left - tight, rect.top + 1f.dp.toPx(), rect.right + tight, rect.bottom - 1f.dp.toPx()),
             brush = Brush.verticalGradient(
                 colors = listOf(
                     fillTop.copy(alpha = fillTop.alpha * fillAlpha),
@@ -249,8 +249,8 @@ private fun DrawScope.drawIssueHighlight(
             radius = radius,
             topRadius = topRadius,
             bottomRadius = bottomRadius,
-            strokeColor = if (active) border.copy(alpha = 0.9f) else stroke,
-            strokeWidth = if (active) 1.4f.dp.toPx() else 1f.dp.toPx(),
+            strokeColor = if (active) border.copy(alpha = 0.55f) else stroke,
+            strokeWidth = if (active) 1.1f.dp.toPx() else 0.9f.dp.toPx(),
         )
     }
 
@@ -291,9 +291,9 @@ private fun DrawScope.drawCaretHandle(
     // 부드러운 번짐
     drawRoundRect(
         color = glow,
-        topLeft = Offset(x - width, t - 1.5f.dp.toPx()),
-        size = androidx.compose.ui.geometry.Size(width * 2f, (b - t) + 3f.dp.toPx()),
-        cornerRadius = CornerRadius(width),
+        topLeft = Offset(x - width * 0.9f, t - 1.dp.toPx()),
+        size = androidx.compose.ui.geometry.Size(width * 1.8f, (b - t) + 2f.dp.toPx()),
+        cornerRadius = CornerRadius(width * 0.9f),
     )
     drawRoundRect(
         color = color,

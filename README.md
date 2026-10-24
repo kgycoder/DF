@@ -2,6 +2,11 @@
 
 > 타이핑하는 순간, 맞춤법이 고쳐집니다.
 
+<p align="center">
+  <img src="docs/screenshots/screen-light.png" width="330" alt="라이트 모드" />
+  <img src="docs/screenshots/screen-dark.png" width="330" alt="다크 모드" />
+</p>
+
 한국어 맞춤법을 **입력하는 동안 실시간으로** 잡아 주는 안드로이드 앱입니다.
 오류 구간은 iOS 선택 영역처럼 부드러운 반투명 파란 하이라이트로 감싸지고,
 바로 아래 카드에서 무엇이 틀렸는지 · 어떻게 고치면 되는지 보여 줍니다.
