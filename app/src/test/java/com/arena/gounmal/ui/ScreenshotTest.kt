@@ -29,6 +29,7 @@ import com.arena.gounmal.OnlineState
 import com.arena.gounmal.spell.Issue
 import com.arena.gounmal.spell.OfflineSpeller
 import com.arena.gounmal.ui.theme.GounmalTheme
+import com.arena.gounmal.ui.theme.LocalGounmalMotion
 import com.arena.gounmal.ui.theme.LocalGounmalPalette
 import org.junit.Rule
 import org.junit.Test
@@ -65,17 +66,17 @@ class ScreenshotTest {
         val issues = OfflineSpeller().check(sampleText)
         val active = issues.firstOrNull { it.original == "몇일" } ?: issues.first()
 
-        composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
             GounmalTheme(darkTheme = dark) {
-                PreviewScreen(
-                    text = sampleText,
-                    issues = issues,
-                    active = active,
-                )
+                androidx.compose.runtime.CompositionLocalProvider(LocalGounmalMotion provides false) {
+                    PreviewScreen(
+                        text = sampleText,
+                        issues = issues,
+                        active = active,
+                    )
+                }
             }
         }
-        composeRule.mainClock.advanceTimeBy(600)
         composeRule.waitForIdle()
 
         val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()

@@ -50,6 +50,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.arena.gounmal.spell.Issue
+import com.arena.gounmal.ui.theme.LocalGounmalMotion
 import com.arena.gounmal.ui.theme.LocalGounmalPalette
 import com.arena.gounmal.ui.theme.editorTextStyle
 
@@ -156,17 +157,23 @@ private fun HighlightCanvas(
     val palette = LocalGounmalPalette.current
 
     // 아주 느린 숨쉬기 효과 — 정지 화면처럼 보이지 않게.
-    val breathe = rememberInfiniteTransition(label = "highlight")
-    val pulse by breathe.animateFloat(
-        initialValue = 0.72f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse,
-            initialStartOffset = StartOffset(0),
-        ),
-        label = "pulse",
-    )
+    val motion = LocalGounmalMotion.current
+    val pulse = if (motion) {
+        val breathe = rememberInfiniteTransition(label = "highlight")
+        val value by breathe.animateFloat(
+            initialValue = 0.72f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(2200, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+                initialStartOffset = StartOffset(0),
+            ),
+            label = "pulse",
+        )
+        value
+    } else {
+        1f
+    }
 
     Canvas(modifier) {
         val textLayout = layout ?: return@Canvas

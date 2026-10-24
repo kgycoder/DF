@@ -103,6 +103,12 @@ private val DarkPalette = GounmalPalette(
 
 val LocalGounmalPalette = staticCompositionLocalOf { LightPalette }
 
+/**
+ * 반복(숨쉬기) 애니메이션 사용 여부.
+ * 스크린샷 테스트·미리보기처럼 화면이 계속 "멈춰" 있어야 하는 곳에서는 끈다.
+ */
+val LocalGounmalMotion = staticCompositionLocalOf { true }
+
 private val LightScheme = lightColorScheme(
     primary = Color(0xFF2F6BFF),
     onPrimary = Color.White,
