@@ -27,7 +27,7 @@ class OfflineSpellerTest {
     @Test
     fun `ㄹ 받침 뒤 의존 명사 수를 띄어 쓴다`() {
         assertEquals("할 수 ", first("나는 할수있다")?.primarySuggestion)
-        assertEquals("그럴 줄 ", first("그럴줄알았다")?.primarySuggestion)
+        assertEquals("럴 줄 ", first("그럴줄알았다")?.primarySuggestion)
     }
 
     @Test

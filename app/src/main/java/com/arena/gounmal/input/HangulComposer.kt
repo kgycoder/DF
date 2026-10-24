@@ -185,7 +185,7 @@ class HangulComposer {
             }
             // 모음이 오면 종성을 다음 글자의 초성으로 넘긴다. (ex. 간 + ㅏ → 가나)
             if (isVowel) {
-                val movable = current.tail != null && CHOSEONG.indexOf(current.tail) >= 0
+                val movable = current.tail?.let { CHOSEONG.indexOf(it) >= 0 } ?: false
                 if (movable) {
                     return Step.Move(
                         leader = current.copy(tail = null),

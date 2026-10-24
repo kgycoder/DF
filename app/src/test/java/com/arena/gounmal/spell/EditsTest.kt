@@ -46,7 +46,8 @@ class EditsTest {
     fun `되돌리기에 쓰는 차이 계산이 원문을 복원한다`() {
         val before = "오늘은 몇일 만에 나갔다"
         val after = "오늘은 며칠 만에 나갔다"
-        val edits = TextDiff.editsBetween(before, after)
+        // 되돌리기 = "지금 상태"에서 "이전 상태"로 가는 차이
+        val edits = TextDiff.editsBetween(after, before)
         assertEquals(before, Edits.apply(after, edits, after.length).text)
     }
 }
