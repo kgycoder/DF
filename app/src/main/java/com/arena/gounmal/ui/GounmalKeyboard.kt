@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -175,7 +176,7 @@ fun GounmalKeyboard(
 }
 
 @Composable
-private fun LetterKey(
+private fun RowScope.LetterKey(
     label: String,
     weight: Float,
     height: Dp,
@@ -195,7 +196,7 @@ private fun LetterKey(
 }
 
 @Composable
-private fun FunctionKey(
+private fun RowScope.FunctionKey(
     weight: Float,
     height: Dp,
     emphasized: Boolean = false,
@@ -218,7 +219,7 @@ private fun FunctionKey(
 }
 
 @Composable
-private fun SpaceKey(weight: Float, height: Dp, onClick: () -> Unit) {
+private fun RowScope.SpaceKey(weight: Float, height: Dp, onClick: () -> Unit) {
     val palette = LocalGounmalPalette.current
     KeySurface(weight = weight, height = height, onClick = onClick) { pressed ->
         Canvas(Modifier.size(width = 26.dp, height = 4.dp)) {
@@ -233,7 +234,7 @@ private fun SpaceKey(weight: Float, height: Dp, onClick: () -> Unit) {
 }
 
 @Composable
-private fun KeySurface(
+private fun RowScope.KeySurface(
     weight: Float,
     height: Dp,
     onClick: () -> Unit,
