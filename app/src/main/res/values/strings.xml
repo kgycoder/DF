@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">고운글</string>
+    <string name="tagline">타이핑하는 순간, 맞춤법이 고쳐집니다</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 반투명 하이라이트 -->
+    <path
+        android:fillAlpha="0.35"
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,36 h48 a11,11 0 0 1 11,11 v22 a11,11 0 0 1 -11,11 h-48 a11,11 0 0 1 -11,-11 v-22 a11,11 0 0 1 11,-11 z" />
+    <!-- 체크 -->
+    <path
+        android:pathData="M37,55 L50,68 L73,42"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="7.5" />
+</vector>
